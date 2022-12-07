@@ -153,21 +153,3 @@ class GenDataset(torch.utils.data.Dataset):
         return map_func(x, y)
     def __len__(self):
         return self.len
-
-
-# try with generator
-# notice the dir
-a = generator('../data/traffic_models/onoff/train', label='delay', shuffle=True)
-
-ds2 = GenDataset('../data/traffic_models/onoff/train', label='delay', shuffle=True)
-
-# test torch dataset output 
-for x, y in ds2:
-    print("=======my data==========")
-    print("name\t\t\ttype\t\t\t\tdtype\t\t.type()\t\tgradient")
-    for i, name in enumerate(x):
-        print(i, name, '\t\t', type(x[name]), '\t', x[name].dtype, '\t', x[name].type(), '\t', x[name].grad)
-        print(i, name, x[name])
-        break
-    print("y", type(y), y.dtype, y.type(), y.grad)
-    break

@@ -3,8 +3,7 @@ import psutil
 
 SEED = 1224
 torch.manual_seed(SEED)
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")  # 'cpu') #
-
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class GNN_Model(torch.nn.Module):
 
@@ -15,7 +14,7 @@ class GNN_Model(torch.nn.Module):
         # All the Hyperparameters can be found in the config.ini file
         self.config = config
 
-        # GRU Cells used in the Message Passing step
+        # GRU used in the Message Passing step
         self.link_update = torch.nn.GRUCell(
             int(self.config['HYPERPARAMETERS']['path_state_dim']),
             int(self.config['HYPERPARAMETERS']['link_state_dim']))
@@ -24,7 +23,6 @@ class GNN_Model(torch.nn.Module):
             int(self.config['HYPERPARAMETERS']['path_state_dim']), batch_first=True)
 
         # Readout Neural Network. It expects as input the path states and outputs the per-path delay
-
         # torch sequential model
         self.readout = torch.nn.Sequential(
             torch.nn.Linear(
@@ -113,7 +111,7 @@ class GNN_Model(torch.nn.Module):
             # output, lens_unpacked = torch.nn.utils.rnn.pad_packed_sequence(packed_output, batch_first=True)
             path_state = torch.squeeze(path_state, dim=0)
 
-            # For every link, gather and sum the sequence of hidden states of the paths that contain it
+            # For each link, gather and sum the sequence of hidden states of the paths that contain it
             path_gather = torch.squeeze(path_state[path_to_link])
 
             # Second message passing: update the link_state
